@@ -2,13 +2,12 @@ const sql = require("./db.js");
 
 // constructor
 const Tutorial = function(tutorial) {
-  this.title = tutorial.title;
-  this.description = tutorial.description;
-  this.published = tutorial.published;
+  this.name = tutorial.name;
+  this.email = tutorial.email;
 };
 
 Tutorial.create = (newTutorial, result) => {
-  sql.query("INSERT INTO tutorials SET ?", newTutorial, (err, res) => {
+  sql.query("INSERT INTO customers SET ?", newTutorial, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -21,7 +20,7 @@ Tutorial.create = (newTutorial, result) => {
 };
 
 Tutorial.findById = (id, result) => {
-  sql.query(`SELECT * FROM tutorials WHERE id = ${id}`, (err, res) => {
+  sql.query(`SELECT * FROM customers WHERE id = ${id}`, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -40,10 +39,10 @@ Tutorial.findById = (id, result) => {
 };
 
 Tutorial.getAll = (title, result) => {
-  let query = "SELECT * FROM tutorials";
+  let query = "SELECT * FROM customers";
 
   if (title) {
-    query += ` WHERE title LIKE '%${title}%'`;
+    query += ` WHERE name LIKE '%${title}%'`;
   }
 
   sql.query(query, (err, res) => {
@@ -58,23 +57,11 @@ Tutorial.getAll = (title, result) => {
   });
 };
 
-Tutorial.getAllPublished = result => {
-  sql.query("SELECT * FROM tutorials WHERE published=true", (err, res) => {
-    if (err) {
-      console.log("error: ", err);
-      result(null, err);
-      return;
-    }
-
-    console.log("tutorials: ", res);
-    result(null, res);
-  });
-};
 
 Tutorial.updateById = (id, tutorial, result) => {
   sql.query(
-    "UPDATE tutorials SET title = ?, description = ?, published = ? WHERE id = ?",
-    [tutorial.title, tutorial.description, tutorial.published, id],
+    "UPDATE tutorials SET name = ?, email = ? WHERE id = ?",
+    [tutorial.name, tutorial.email, id],
     (err, res) => {
       if (err) {
         console.log("error: ", err);
@@ -95,7 +82,7 @@ Tutorial.updateById = (id, tutorial, result) => {
 };
 
 Tutorial.remove = (id, result) => {
-  sql.query("DELETE FROM tutorials WHERE id = ?", id, (err, res) => {
+  sql.query("DELETE FROM customers WHERE id = ?", id, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -114,7 +101,7 @@ Tutorial.remove = (id, result) => {
 };
 
 Tutorial.removeAll = result => {
-  sql.query("DELETE FROM tutorials", (err, res) => {
+  sql.query("DELETE FROM customers", (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
